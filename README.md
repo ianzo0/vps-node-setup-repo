@@ -53,9 +53,11 @@
 请安装并使用这个仓库中 `skills/vps-proxy-node-setup` 目录的 Skill：
 https://github.com/ianzo0/vps-node-setup-repo
 
-如果 GitHub 无法访问，请下载 Cloudflare 备用 `.tar.gz` 包及同名 `.minisig` 签名。加载前必须以 Minisign 验签；验签通过后自行解压并加载 Skill。只信任下面的固定公钥：
-https://vps-node-download.pages.dev/vps-node-setup.tar.gz
-公钥：`RWRvdJt+t7f7UwEUivaioOMuosD2mHFKbLTIvZtngAY3xyEoyAUzQTdD`
+如果 GitHub 无法访问，请改用 Cloudflare 备用包。下载包及其签名后，以 Minisign 验签；验签失败立即停止，不要加载或执行其中内容。验签通过后解压并加载 Skill：
+
+- 包：https://vps-node-download.pages.dev/vps-node-setup.tar.gz
+- 签名：https://vps-node-download.pages.dev/vps-node-setup.tar.gz.minisig
+- 只信任公钥：`RWRvdJt+t7f7UwEUivaioOMuosD2mHFKbLTIvZtngAY3xyEoyAUzQTdD`
 
 然后在以下全新 VPS 上完成节点部署，不要执行 rollback。
 
