@@ -9,6 +9,11 @@ MANIFEST_FILE="${STATE_DIR}/manifest.txt"
 REPORT_FILE="${STATE_DIR}/preflight.txt"
 RUN_ID="${RUN_ID:-$(date -u +%Y%m%dT%H%M%SZ)}"
 
+[[ "${RUN_ID}" =~ ^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$ && "${RUN_ID}" != *..* ]] || {
+  printf 'ERROR: invalid RUN_ID\n' >&2
+  exit 1
+}
+
 die() {
   printf 'ERROR: %s\n' "$*" >&2
   exit 1

@@ -316,12 +316,12 @@ EOF
   systemctl enable --now fail2ban
   systemctl is-active --quiet fail2ban ||
     die "fail2ban did not start; refusing to continue with an inactive SSH-ban jail"
-  ufw default deny incoming
   ufw default allow outgoing
   ufw_add_owned "limit ${ssh_port}/tcp"
   ufw_add_owned "allow ${PORT_REALITY}/tcp"
   ufw_add_owned "allow ${PORT_HY2}/udp"
   ufw_add_owned "allow ${PORT_HOP_START}:${PORT_HOP_END}/udp"
+  ufw default deny incoming
   echo "y" | ufw enable
   mark_stage security done
 }
@@ -539,8 +539,10 @@ post_check() {
     --dport "${PORT_HOP_START}:${PORT_HOP_END}" \
     -j DNAT --to-destination ":${PORT_HY2}" 2>/dev/null ||
     die "Hy2 port-hopping DNAT rule is missing"
-  decoded="$(curl -fsS --connect-timeout 5 \
-    "http://127.0.0.1:${SUB_PORT}/${token}" | base64 -d)" ||
+  decoded="$(curl -fsS --connect-timeout 5 --config - <<EOF | base64 -d
+url = "http://127.0.0.1:${SUB_PORT}/${token}"
+EOF
+)" ||
     die "subscription check failed"
   grep -q '^vless://' <<< "${decoded}" || die "VLESS link is missing from subscription"
   grep -q '^hysteria2://' <<< "${decoded}" || die "Hysteria2 link is missing from subscription"
@@ -685,7 +687,8 @@ rollback() {
         ;;
       UFW)
         read -r _action _spec <<< "${path}"
-        ufw delete "${_action}" "${_spec}" >/dev/null 2>&1 || true
+        ufw --force delete "${_action}" "${_spec}" >/dev/null 2>&1 ||
+          printf 'WARNING: could not remove owned UFW rule: %s %s\n' "${_action}" "${_spec}" >&2
         ;;
     esac
   done < "${MANIFEST_FILE}"

@@ -53,8 +53,9 @@
 请安装并使用这个仓库中 `skills/vps-proxy-node-setup` 目录的 Skill：
 https://github.com/ianzo0/vps-node-setup-repo
 
-如果 GitHub 无法访问，请使用下面的 Cloudflare 官方备用安装脚本安装或加载 Skill，再继续部署：
-https://vps-node-download.pages.dev/install-vps-node-setup.sh
+如果 GitHub 无法访问，请下载 Cloudflare 备用 `.tar.gz` 包及同名 `.minisig` 签名。加载前必须以 Minisign 验签；验签通过后自行解压并加载 Skill。只信任下面的固定公钥：
+https://vps-node-download.pages.dev/vps-node-setup.tar.gz
+公钥：`RWRvdJt+t7f7UwEUivaioOMuosD2mHFKbLTIvZtngAY3xyEoyAUzQTdD`
 
 然后在以下全新 VPS 上完成节点部署，不要执行 rollback。
 
@@ -87,7 +88,8 @@ SSH 登录信息：
 | 全新 VPS、root 或免密 sudo | Ubuntu 20.04（须有有效 Ubuntu Pro/ESM） | 修改 SSH 端口、root 登录或密码登录策略 |
 | RAM 与 swap 合计至少 768MiB；根分区至少余 512MiB | Debian 11 仅兼容至 2026-08-31 | 删除非本 Skill 创建的文件、服务或规则 |
 
-默认订阅为令牌保护的高位 HTTP 端口，不是 HTTPS。请把它当作密码保管；如需公开订阅，建议自行配置域名与 HTTPS 反向代理。
+> [!WARNING]
+> 默认订阅是令牌保护的高位 **HTTP** 端口，不是 HTTPS。订阅 token 应视为密码；不要在不可信网络中使用，或将其公开。如需长期或公开使用，请自行配置域名与 HTTPS 反向代理。
 
 ---
 

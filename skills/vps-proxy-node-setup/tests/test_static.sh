@@ -2,6 +2,7 @@
 set -Eeuo pipefail
 
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+REPO_ROOT="$(cd -- "${ROOT}/../.." && pwd)"
 
 bash -n "${ROOT}/scripts/lib.sh" "${ROOT}/scripts/deploy.sh" \
   "${ROOT}/templates/vps-node-firewall.sh"
@@ -19,6 +20,9 @@ jq -e '.sing_box.artifacts.arm64.sha256 | test("^[0-9a-f]{64}$")' \
 
 grep -q -- '--token-file' "${ROOT}/scripts/deploy.sh"
 ! grep -qE 'ExecStart=.*--token[[:space:]]' "${ROOT}/scripts/deploy.sh"
+grep -q 'curl -fsS --connect-timeout 5 --config -' "${ROOT}/scripts/deploy.sh"
+grep -q 'invalid RUN_ID' "${ROOT}/scripts/lib.sh"
+grep -q '"level": "warn"' "${ROOT}/templates/sing-box.json.template"
 grep -q "grep -q '^vless://'" "${ROOT}/scripts/deploy.sh"
 grep -q "grep -q '^hysteria2://'" "${ROOT}/scripts/deploy.sh"
 grep -q 'snapshot_fail2ban_state' "${ROOT}/scripts/deploy.sh"
@@ -34,6 +38,10 @@ grep -q 'create_owned_dir' "${ROOT}/scripts/deploy.sh"
 grep -q 'CREATED_DIR' "${ROOT}/scripts/deploy.sh"
 grep -q '^resume()' "${ROOT}/scripts/deploy.sh"
 grep -q 'resume=verified' "${ROOT}/scripts/deploy.sh"
+grep -qx 'RWRvdJt+t7f7UwEUivaioOMuosD2mHFKbLTIvZtngAY3xyEoyAUzQTdD' \
+  "${REPO_ROOT}/MINISIGN-PUBLIC-KEY.txt"
+grep -q 'minisign -Sm public/vps-node-setup.tar.gz' \
+  "${REPO_ROOT}/.github/workflows/publish-download.yml"
 
 "${ROOT}/tests/test_state.sh"
 "${ROOT}/tests/test_safety.sh"

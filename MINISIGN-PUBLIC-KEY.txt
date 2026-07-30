@@ -1,0 +1,2 @@
+untrusted comment: vps-node-setup fallback release signing key 53FBB7B77E9B746F
+RWRvdJt+t7f7UwEUivaioOMuosD2mHFKbLTIvZtngAY3xyEoyAUzQTdD

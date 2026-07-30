@@ -34,4 +34,10 @@ record_created "${source_file}"
 mark_stage test done
 stage_is_done test
 
+if STATE_DIR="${TEST_ROOT}/invalid-state" RUN_ID='../invalid' \
+  bash -c '. "$1/scripts/lib.sh"' -- "${ROOT}" 2>/dev/null; then
+  echo "invalid RUN_ID was accepted" >&2
+  exit 1
+fi
+
 echo "state helper tests passed"

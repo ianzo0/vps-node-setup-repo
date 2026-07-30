@@ -8,8 +8,9 @@
 请安装并使用这个仓库中 `skills/vps-proxy-node-setup` 目录的 Skill：
 https://github.com/ianzo0/vps-node-setup-repo
 
-如果 GitHub 无法访问，请使用下面的 Cloudflare 官方备用安装脚本安装或加载 Skill，再继续部署：
-https://vps-node-download.pages.dev/install-vps-node-setup.sh
+如果 GitHub 无法访问，请下载 Cloudflare 备用 `.tar.gz` 包和其 `.minisig` 签名，并在加载前用 Minisign 验签。验签通过后自行解压并加载 Skill；验签失败则停止。只信任下面的固定公钥：
+https://vps-node-download.pages.dev/vps-node-setup.tar.gz
+公钥：`RWRvdJt+t7f7UwEUivaioOMuosD2mHFKbLTIvZtngAY3xyEoyAUzQTdD`
 
 然后在以下全新 VPS 上完成节点部署，不要执行 rollback。
 
