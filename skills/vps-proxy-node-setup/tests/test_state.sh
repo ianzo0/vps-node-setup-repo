@@ -9,9 +9,17 @@ STATE_DIR="${TEST_ROOT}/state"
 RUN_ID="test-run"
 . "${ROOT}/scripts/lib.sh"
 
+file_mode() {
+  if stat -c '%a' "$1" >/dev/null 2>&1; then
+    stat -c '%a' "$1"
+  else
+    stat -f '%Lp' "$1"
+  fi
+}
+
 ensure_state_dir
-[[ "$(stat -f '%Lp' "${STATE_FILE}" 2>/dev/null || stat -c '%a' "${STATE_FILE}")" == 600 ]]
-[[ "$(stat -f '%Lp' "${MANIFEST_FILE}" 2>/dev/null || stat -c '%a' "${MANIFEST_FILE}")" == 600 ]]
+[[ "$(file_mode "${STATE_FILE}")" == 600 ]]
+[[ "$(file_mode "${MANIFEST_FILE}")" == 600 ]]
 
 source_file="${TEST_ROOT}/owned.conf"
 printf 'before\n' > "${source_file}"
