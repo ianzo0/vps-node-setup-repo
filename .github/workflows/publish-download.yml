@@ -50,6 +50,14 @@ jobs:
             printf 'Source commit: %s\n' "${GITHUB_SHA}"
             printf 'Archive root: vps-node-setup/\n'
           } > public/SOURCE-COMMIT.txt
+          cat > public/_headers <<'EOF'
+          /vps-node-setup.zip
+            Cache-Control: no-store
+          /vps-node-setup.zip.sha256
+            Cache-Control: no-store
+          /SOURCE-COMMIT.txt
+            Cache-Control: no-store
+          EOF
 
       - name: Publish to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
