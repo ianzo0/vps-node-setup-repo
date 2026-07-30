@@ -47,10 +47,7 @@
 
 任何支持加载 Skill 的 Agent 都可以使用。将 [`skills/vps-proxy-node-setup`](skills/vps-proxy-node-setup) 安装或加载到 Agent 的 skills 目录，然后提供一台全新 VPS 的 SSH 主机、端口、用户和现有认证方式即可；无需手动在服务器粘贴部署命令。
 
-<details>
-<summary><strong>复制部署提示词</strong></summary>
-
-<br>
+### 复制部署提示词
 
 ```text
 请使用 $vps-proxy-node-setup 在这台全新 VPS 上完成自动部署。
@@ -62,9 +59,27 @@
 除非我另外明确要求，否则不要执行 rollback。
 ```
 
-</details>
+### 复制独立验证提示词
 
-需要让另一位 Agent 完整独立验证时，直接使用 [AGENT-TEST-PROMPT.md](AGENT-TEST-PROMPT.md)。
+将 `vps-proxy-node-setup` 安装或加载为 Skill，再把下面第一段和一台全新测试 VPS 的 SSH 信息交给另一位 Agent。节点链接已另行保存、且允许删除测试节点后，再单独发送第二段。
+
+**完整部署测试**
+
+```text
+请使用 $vps-proxy-node-setup 在这台全新 VPS 上完成自动部署。
+
+先执行只读 preflight；符合条件后直接执行完整 apply，不需要再次询问确认。云厂商入站防护是部署前置条件，须放行 TCP 443、UDP 8443 与 UDP 2500-3600。部署完成后读取生成的订阅 TCP 端口并提示用户到云厂商后台放行。随后执行一次 resume 和 status，确认不会重复生成凭据，并检查 sing-box、端口跳跃和订阅服务状态。
+
+最后只输出 VLESS Reality 链接、Hysteria2 链接、订阅地址、验证结果和仍需外部客户端确认的边界。明确提醒：云厂商入站防护必须放行 TCP 443、UDP 8443、UDP 2500-3600 和订阅 TCP 端口；VPS 内的 UFW 通过不代表外部 UDP 可达。不要把 SSH 密码、Reality 私钥、服务器 JSON 或完整状态文件写入项目、日志或最终回复。
+
+除非我另外明确要求，否则不要执行 rollback。
+```
+
+**回滚测试**
+
+```text
+请使用 $vps-proxy-node-setup 对刚才的测试部署执行 rollback。完成后确认三个自有服务已移除、自有 UFW/NAT 规则已删除、原有 UFW 状态和配置备份已恢复，并说明哪些系统软件包按设计保留。
+```
 
 ### WorkBuddy 已验证
 
