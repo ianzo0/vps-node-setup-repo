@@ -65,42 +65,6 @@ SSH 登录信息：
 - 密码：
 ```
 
-### GitHub 访问受限时
-
-GitHub 是默认来源。若无法打开或下载仓库，直接让 Agent 使用下面的官方备用安装地址即可：
-
-- [Cloudflare 备用安装地址](https://vps-node-download.pages.dev/install-vps-node-setup.sh)
-
-备用来源会随每次公开更新自动同步。
-
-### 复制独立验证提示词
-
-将 `vps-proxy-node-setup` 安装或加载为 Skill，再把下面第一段和一台全新测试 VPS 的 SSH 信息交给另一位 Agent。节点链接已另行保存、且允许删除测试节点后，再单独发送第二段。
-
-**完整部署测试**
-
-```text
-请安装并使用这个仓库中 `skills/vps-proxy-node-setup` 目录的 Skill：
-https://github.com/ianzo0/vps-node-setup-repo
-
-如果 GitHub 无法访问，请使用下面的 Cloudflare 官方备用安装脚本安装或加载 Skill，再继续部署：
-https://vps-node-download.pages.dev/install-vps-node-setup.sh
-
-然后在以下全新 VPS 上完成节点部署，不要执行 rollback。
-
-SSH 登录信息：
-- IP：
-- 端口：
-- 用户：root
-- 密码：
-```
-
-**回滚测试**
-
-```text
-请使用刚才安装的 Skill，对刚才这台测试 VPS 执行 rollback。完成后只汇报回滚验证结果。
-```
-
 ### WorkBuddy 已验证
 
 在 WorkBuddy 中加载此 Skill 后，选择 **Auto** 模型即可。该方式已完成独立部署、`resume` 和 rollback 验证；外部客户端仍须分别测试 Reality 与 Hysteria2。
