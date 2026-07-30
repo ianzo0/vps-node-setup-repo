@@ -609,6 +609,16 @@ apply() {
   printf 'deployment=complete\nresult_file=%s\n' "${STATE_DIR}/result.txt"
 }
 
+resume() {
+  apply
+  # `apply` skips completed stages by design. A resume must nevertheless prove
+  # that the completed node is still healthy before reporting success.
+  post_check
+  systemctl is-active --quiet fail2ban || die "fail2ban is not active after resume"
+  fail2ban-client ping >/dev/null || die "fail2ban did not respond after resume"
+  printf 'resume=verified\n'
+}
+
 status() {
   need_root
   if [[ ! -f "${STATE_FILE}" ]]; then
@@ -703,7 +713,8 @@ rollback() {
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
   case "${1:-preflight}" in
     preflight) preflight ;;
-    apply|resume) apply ;;
+    apply) apply ;;
+    resume) resume ;;
     status) status ;;
     rollback) rollback ;;
     *) die "usage: deploy.sh {preflight|apply|resume|status|rollback}" ;;

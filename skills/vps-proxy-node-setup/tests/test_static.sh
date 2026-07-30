@@ -32,6 +32,8 @@ grep -q 'external_client_test_required' "${ROOT}/scripts/deploy.sh"
 grep -q 'provider_firewall_required' "${ROOT}/scripts/deploy.sh"
 grep -q 'create_owned_dir' "${ROOT}/scripts/deploy.sh"
 grep -q 'CREATED_DIR' "${ROOT}/scripts/deploy.sh"
+grep -q '^resume()' "${ROOT}/scripts/deploy.sh"
+grep -q 'resume=verified' "${ROOT}/scripts/deploy.sh"
 
 "${ROOT}/tests/test_state.sh"
 "${ROOT}/tests/test_safety.sh"

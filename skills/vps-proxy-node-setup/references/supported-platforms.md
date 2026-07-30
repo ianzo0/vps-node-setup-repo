@@ -25,7 +25,7 @@
 
 - `443/tcp` for VLESS Reality
 - `8443/udp` for Hysteria2
-- `2500:3600/udp` for Hysteria2 port hopping (forwarded by a skill-owned DNAT rule to the Hy2 main port)
+- `2500:3600/udp` for Hysteria2 port hopping (forwarded by a skill-owned DNAT rule to the Hysteria2 main port)
 - One generated high TCP port for the token-protected HTTP subscription
 
 The generated subscription uses plain HTTP unless the user supplies a separately managed HTTPS reverse proxy and domain. The URL is bearer-token protected and must be treated like a password.
