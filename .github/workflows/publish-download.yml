@@ -26,7 +26,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run offline checks
-        run: skills/vps-proxy-node-setup/tests/test_static.sh
+        shell: bash
+        run: |
+          if ! skills/vps-proxy-node-setup/tests/test_static.sh; then
+            bash -x skills/vps-proxy-node-setup/tests/test_static.sh
+            exit 1
+          fi
 
       - name: Build verified download package
         shell: bash
