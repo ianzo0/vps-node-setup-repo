@@ -8,7 +8,7 @@
 请安装并使用这个仓库中 `skills/vps-proxy-node-setup` 目录的 Skill：
 https://github.com/ianzo0/vps-node-setup-repo
 
-如果 GitHub 无法访问，请改从下面的 Cloudflare 地址下载 `install-vps-node-setup.sh` 及其 `.sha256` 校验文件；校验后以 root 运行安装脚本。它会下载并校验 Skill 压缩包，自动解压；若极简 Debian/Ubuntu 缺少解压工具，会自动安装 `unzip`。完成后加载生成的 `vps-node-setup` 文件夹，再继续部署：
+如果 GitHub 无法访问，请使用下面的 Cloudflare 官方备用安装脚本安装或加载 Skill，再继续部署：
 https://vps-node-download.pages.dev/install-vps-node-setup.sh
 
 然后在以下全新 VPS 上完成节点部署，不要执行 rollback。
