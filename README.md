@@ -69,7 +69,7 @@ GitHub 是默认来源。若无法打开或下载仓库，可使用已校验的�
 - [下载 Skill 压缩包](https://vps-node-download.pages.dev/vps-node-setup.zip)
 - [校验和（SHA-256）](https://vps-node-download.pages.dev/vps-node-setup.zip.sha256)
 
-极简 VPS 可能没有 `unzip`。可下载并校验下面的安装脚本；它会校验压缩包，并自动使用 `unzip` 或 Python 解压（不会执行部署）：
+极简 VPS 可能没有 `unzip`。可下载并校验下面的安装脚本；它会校验压缩包，并自动使用 `unzip` 或 Python 解压；两者都没有时，会在 root 的 Debian/Ubuntu 环境自动安装 `unzip`。脚本只解压 Skill，不会执行部署：
 
 ```bash
 curl -fsSLO https://vps-node-download.pages.dev/install-vps-node-setup.sh

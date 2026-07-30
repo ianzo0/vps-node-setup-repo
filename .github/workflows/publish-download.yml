@@ -77,8 +77,15 @@ jobs:
           import zipfile
           zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])
           PY
+          elif command -v apt-get >/dev/null 2>&1 && [ "$(id -u)" -eq 0 ]; then
+            echo 'Installing unzip to extract the verified Skill package...'
+            export DEBIAN_FRONTEND=noninteractive
+            apt-get update
+            apt-get install -y unzip
+            unzip -q "$work_dir/vps-node-setup.zip" -d "$target_dir"
           else
             echo 'Need unzip or python3 to extract the verified Skill package.' >&2
+            echo 'On Debian/Ubuntu, run this installer as root to allow automatic unzip installation.' >&2
             exit 1
           fi
 
