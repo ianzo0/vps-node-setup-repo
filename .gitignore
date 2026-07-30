@@ -1,0 +1,7 @@
+.DS_Store
+*.log
+*.zip
+*.tar.gz
+tmp/
+.tmp/
+artifacts/

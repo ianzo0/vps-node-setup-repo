@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "sing_box": {
+    "version": "1.13.12",
+    "source": "https://github.com/SagerNet/sing-box/releases",
+    "policy": "Pin an exact reviewed release and its SHA-256 per architecture. Never resolve latest at deployment time.",
+    "artifacts": {
+      "amd64": {
+        "archive": "sing-box-1.13.12-linux-amd64.tar.gz",
+        "binary": "sing-box",
+        "url": "https://github.com/SagerNet/sing-box/releases/download/v1.13.12/sing-box-1.13.12-linux-amd64.tar.gz",
+        "sha256": "1540533adb3df24f5ad5f14b5c7ca3dbc2401b10a1c1eb278fcadcada47ec6c4"
+      },
+      "arm64": {
+        "archive": "sing-box-1.13.12-linux-arm64.tar.gz",
+        "binary": "sing-box",
+        "url": "https://github.com/SagerNet/sing-box/releases/download/v1.13.12/sing-box-1.13.12-linux-arm64.tar.gz",
+        "sha256": "1ffa3b48ad6fa98f9fd810482e39bdd5b6157782ef11ce37d67bdcfd9338547a"
+      }
+    }
+  }
+}

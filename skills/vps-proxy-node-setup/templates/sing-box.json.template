@@ -1,0 +1,62 @@
+{
+  "log": {
+    "level": "info",
+    "timestamp": true
+  },
+  "inbounds": [
+    {
+      "type": "vless",
+      "tag": "vps-node-reality",
+      "listen": "0.0.0.0",
+      "listen_port": 443,
+      "users": [
+        {
+          "name": "vps-node",
+          "uuid": "__VLESS_UUID__",
+          "flow": "xtls-rprx-vision"
+        }
+      ],
+      "tls": {
+        "enabled": true,
+        "server_name": "__REALITY_SNI__",
+        "reality": {
+          "enabled": true,
+          "handshake": {
+            "server": "__REALITY_SNI__",
+            "server_port": 443
+          },
+          "private_key": "__REALITY_PRIVATE_KEY__",
+          "short_id": [
+            "__REALITY_SHORT_ID__"
+          ]
+        }
+      }
+    },
+    {
+      "type": "hysteria2",
+      "tag": "vps-node-hy2",
+      "listen": "0.0.0.0",
+      "listen_port": 8443,
+      "users": [
+        {
+          "name": "vps-node",
+          "password": "__HY2_PASSWORD__"
+        }
+      ],
+      "tls": {
+        "enabled": true,
+        "alpn": [
+          "h3"
+        ],
+        "certificate_path": "/etc/vps-node-setup/hy2-cert.pem",
+        "key_path": "/etc/vps-node-setup/hy2-key.pem"
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "direct",
+      "tag": "direct"
+    }
+  ]
+}
