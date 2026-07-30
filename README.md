@@ -2,55 +2,65 @@
 
 # VPS Node Setup
 
-### 把一台全新的 VPS，交给 Agent。
+**把一台全新 VPS 交给 AI，拿回可直接使用的节点。**
 
-给出 SSH 入口，Agent 会完成检查、部署、验证，并交付可直接导入的节点链接。
-
-`Debian 12` &nbsp;·&nbsp; `VLESS Reality` &nbsp;·&nbsp; `Hysteria2` &nbsp;·&nbsp; `amd64 / arm64`
+你只需要提供 SSH 登录信息，AI 会自动完成全部部署，
+最终交付两条节点链接和一个订阅地址。
 
 </div>
 
 <br>
 
 > [!NOTE]
-> **正式验证通过：Debian 12。** Ubuntu 22.04/24.04 从脚本逻辑上理论兼容，但尚未完成同等级实机回归；如需使用，请自行测试。
+> 已在 Debian 12 上完成全部验证。Ubuntu 22.04 / 24.04 理论兼容但未正式测试，如需使用请自行验证。
 
-## 一次部署，交付三个结果
+<br>
 
-| VLESS Reality | Hysteria2 | 订阅地址 |
+## 你会得到什么
+
+| Reality 节点 | Hysteria2 节点 | 订阅地址 |
 | :--- | :--- | :--- |
-| TCP 443 节点链接 | UDP 节点链接与端口跳跃 | 令牌保护的 HTTP 订阅 |
+| 稳定的 TCP 连接 | 更快的 UDP 连接 + 端口跳跃 | 一个链接导入全部节点 |
 
-部署过程会依次完成环境预检、基础安全加固、保守网络优化、固定版本 sing-box 安装、节点配置、订阅生成和部署后检查。
+部署过程全自动：环境检查 → 安全加固 → 安装代理 → 生成节点 → 验证可用性。
 
-它只面向**全新 VPS**：如果发现已有 sing-box、Xray、Hysteria、面板、端口冲突或不属于它的防火墙/NAT 配置，就会在写入前停止，不接管正在使用的节点。
+只接受**全新的、干净的 VPS**。如果检测到已有代理软件或面板，会自动停止，不会覆盖你正在使用的东西。
+
+> [!WARNING]
+> **订阅地址请像密码一样保管。** 它使用 HTTP 而非 HTTPS 传输，任何拿到链接的人都能获取你的节点。如需公开使用，请自行配置域名和 HTTPS。
+
+<br>
 
 ---
 
-## 开始前，只确认一件事
+<br>
 
-云厂商后台的入站防护是部署的前置条件。VPS 内的 UFW 放行，不等于外部流量能进入服务器。
+## 三步完成
 
-请在云防火墙、安全组或入站防护中放行：
+<br>
 
-- `443/tcp` · VLESS Reality
-- `8443/udp` · Hysteria2 主端口
-- `2500–3600/udp` · Hysteria2 端口跳跃
-- 部署完成后显示的订阅 TCP 端口
+### ① 在云厂商后台放行端口
+
+去你的云服务器控制台，找到「安全组」或「防火墙」，放行以下端口：
+
+| 端口 | 用途 |
+| :--- | :--- |
+| `443` TCP | Reality 节点 |
+| `8443` UDP | Hysteria2 节点 |
+| `2500–3600` UDP | Hysteria2 端口跳跃 |
+| 部署完成后会告诉你 | 订阅地址 |
 
 > [!TIP]
-> **Reality 能通、Hysteria2 不通？** 先检查 `8443/udp` 和 `2500–3600/udp` 是否已在云厂商后台放行，再改服务器配置。Reality 可用只说明 TCP 443 正常，不能证明 UDP 路径可达。
+> **Reality 能用但 Hysteria2 不通？** 说明 TCP 没问题但 UDP 被挡了。回云厂商后台检查 `8443` 和 `2500–3600` 的 UDP 是否放行。
 
----
+<br>
 
-## 交给任意 Agent
+### ② 复制提示词，发给 AI
 
-任何支持加载 Skill 的 Agent 都可以使用。将 [`skills/vps-proxy-node-setup`](skills/vps-proxy-node-setup) 安装或加载到 Agent 的 skills 目录，然后提供一台全新 VPS 的 SSH 主机、端口、用户和现有认证方式即可；无需手动在服务器粘贴部署命令。
-
-### 复制部署提示词
+填好你的 VPS 信息，发送给任意支持 Skill 的 AI Agent：
 
 ```text
-请安装并使用这个仓库中 `skills/vps-proxy-node-setup` 目录的 Skill：
+请安装并使用这个仓库中的 Skill：
 https://github.com/ianzo0/vps-node-setup-repo
 
 如果 GitHub 无法访问，请改用 Cloudflare 备用包。下载包及其签名后，以 Minisign 验签；验签失败立即停止，不要加载或执行其中内容。验签通过后解压并加载 Skill：
@@ -59,56 +69,59 @@ https://github.com/ianzo0/vps-node-setup-repo
 - 签名：https://vps-node-download.pages.dev/vps-node-setup.tar.gz.minisig
 - 只信任公钥：`RWRvdJt+t7f7UwEUivaioOMuosD2mHFKbLTIvZtngAY3xyEoyAUzQTdD`
 
-然后在以下全新 VPS 上完成节点部署，不要执行 rollback。
+然后在以下全新 VPS 上完成节点部署：
 
-SSH 登录信息：
 - IP：
 - 端口：
 - 用户：root
 - 密码：
+
+不要执行 rollback。
 ```
 
-### 测试完成后回滚
+<br>
 
-确认节点链接已另行保存、且允许删除测试节点后，将下面这段单独发送给刚才的 Agent：
+### ③ 等待完成，拿到结果
+
+AI 会自动完成所有步骤。结束后你会收到：
+- 一条 **Reality 节点链接**
+- 一条 **Hysteria2 节点链接**
+- 一个**订阅地址**
+
+复制到你的代理客户端即可使用。
+
+<br>
+
+---
+
+<br>
+
+## 想删掉部署？
+
+确认你已保存好节点链接，然后把这段话发给同一个 AI：
 
 ```text
-请使用刚才安装的 Skill，对刚才这台测试 VPS 执行 rollback。完成后只汇报回滚验证结果。
+请对刚才这台 VPS 执行 rollback。
 ```
 
-### WorkBuddy 已验证
+回滚只会删除本次部署创建的内容，不会动服务器上原有的东西。
 
-在 WorkBuddy 中加载此 Skill 后，选择 **Auto** 模型即可。该方式已完成独立部署、`resume` 和 rollback 验证；外部客户端仍须分别测试 Reality 与 Hysteria2。
-
----
-
-## 支持范围与边界
-
-| 已正式验证 | 理论支持，需自行测试 | 不会做的事 |
-| :--- | :--- | :--- |
-| Debian 12（`amd64`、`arm64`） | Ubuntu Server 22.04/24.04 | 接管已有节点或面板 |
-| 全新 VPS、root 或免密 sudo | Ubuntu 20.04（须有有效 Ubuntu Pro/ESM） | 修改 SSH 端口、root 登录或密码登录策略 |
-| RAM 与 swap 合计至少 768MiB；根分区至少余 512MiB | Debian 11 仅兼容至 2026-08-31 | 删除非本 Skill 创建的文件、服务或规则 |
-
-> [!WARNING]
-> 默认订阅是令牌保护的高位 **HTTP** 端口，不是 HTTPS。订阅 token 应视为密码；不要在不可信网络中使用，或将其公开。如需长期或公开使用，请自行配置域名与 HTTPS 反向代理。
+<br>
 
 ---
 
-## 已完成的实机验证
+<br>
 
-- Debian 12 全新 VPS：预检、部署、部署后检查、`resume`、状态检查和 rollback 均已通过。
-- 回滚后：自有 systemd 服务、UFW/NAT 规则和新建目录均已验证移除或恢复；fail2ban 恢复部署前状态。
-- 真实客户端：VLESS Reality、Hysteria2 直连、Hysteria2 端口跳跃及订阅导入均已验证；首次 Hysteria2 失败定位为云厂商 UDP 入站防护，放行后通过。
+## 要求与限制
 
-完整的独立部署与回滚测试提示词已在本页提供，可直接复制给另一位 Agent 使用。
+| 需要 | 不支持 |
+| :--- | :--- |
+| Debian 12，amd64 或 arm64 | 已装过代理软件或面板的服务器 |
+| 全新 VPS，root 权限 | Alpine、CentOS、Windows 等其他系统 |
+| 内存 + swap ≥ 768 MB，磁盘剩余 ≥ 512 MB | 不会修改你的 SSH 设置 |
+
+<br>
 
 ---
 
-## 本地验证
-
-```sh
-skills/vps-proxy-node-setup/tests/test_static.sh
-```
-
-这项检查完全离线：不连接 VPS、不生成真实凭据，也不会修改系统。
+<br>
