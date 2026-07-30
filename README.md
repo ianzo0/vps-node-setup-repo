@@ -65,6 +65,14 @@ SSH 登录信息：
 - 密码：
 ```
 
+### 测试完成后回滚
+
+确认节点链接已另行保存、且允许删除测试节点后，将下面这段单独发送给刚才的 Agent：
+
+```text
+请使用刚才安装的 Skill，对刚才这台测试 VPS 执行 rollback。完成后只汇报回滚验证结果。
+```
+
 ### WorkBuddy 已验证
 
 在 WorkBuddy 中加载此 Skill 后，选择 **Auto** 模型即可。该方式已完成独立部署、`resume` 和 rollback 验证；外部客户端仍须分别测试 Reality 与 Hysteria2。
