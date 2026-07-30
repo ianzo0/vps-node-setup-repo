@@ -62,6 +62,15 @@ SSH 登录信息：
 - 密码：
 ```
 
+### GitHub 访问受限时
+
+GitHub 是默认来源。若无法打开或下载仓库，可使用已校验的备用下载包：
+
+- [下载 Skill 压缩包](https://vps-node-download.pages.dev/vps-node-setup.zip)
+- [校验和（SHA-256）](https://vps-node-download.pages.dev/vps-node-setup.zip.sha256)
+
+下载并解压后，将其中的 `vps-node-setup` 文件夹安装或加载为 Skill，再使用上面的部署提示词。备用包与 GitHub 当前版本对应；每次公开更新都会同步刷新。
+
 ### 复制独立验证提示词
 
 将 `vps-proxy-node-setup` 安装或加载为 Skill，再把下面第一段和一台全新测试 VPS 的 SSH 信息交给另一位 Agent。节点链接已另行保存、且允许删除测试节点后，再单独发送第二段。
