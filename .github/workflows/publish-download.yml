@@ -45,6 +45,51 @@ jobs:
             cd public
             sha256sum vps-node-setup.zip
           ) > public/vps-node-setup.zip.sha256
+          cat > public/install-vps-node-setup.sh <<'EOF'
+          #!/usr/bin/env bash
+          # Downloads, verifies, and extracts the Skill without requiring unzip.
+          set -Eeuo pipefail
+
+          base_url='https://vps-node-download.pages.dev'
+          target_dir="${1:-$PWD}"
+          work_dir="$(mktemp -d)"
+          trap 'rm -rf "$work_dir"' EXIT
+
+          command -v curl >/dev/null 2>&1 || {
+            echo 'curl is required to download the verified Skill package.' >&2
+            exit 1
+          }
+          command -v sha256sum >/dev/null 2>&1 || {
+            echo 'sha256sum is required to verify the Skill package.' >&2
+            exit 1
+          }
+
+          curl -fsSL "$base_url/vps-node-setup.zip" -o "$work_dir/vps-node-setup.zip"
+          curl -fsSL "$base_url/vps-node-setup.zip.sha256" -o "$work_dir/vps-node-setup.zip.sha256"
+          (cd "$work_dir" && sha256sum -c vps-node-setup.zip.sha256)
+
+          mkdir -p "$target_dir"
+          if command -v unzip >/dev/null 2>&1; then
+            unzip -q "$work_dir/vps-node-setup.zip" -d "$target_dir"
+          elif command -v python3 >/dev/null 2>&1; then
+            python3 - "$work_dir/vps-node-setup.zip" "$target_dir" <<'PY'
+          import sys
+          import zipfile
+          zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])
+          PY
+          else
+            echo 'Need unzip or python3 to extract the verified Skill package.' >&2
+            exit 1
+          fi
+
+          printf 'Skill extracted to: %s/vps-node-setup\n' "$target_dir"
+          printf 'Run deployment scripts with: bash scripts/deploy.sh <command>\n'
+          EOF
+          chmod +x public/install-vps-node-setup.sh
+          (
+            cd public
+            sha256sum install-vps-node-setup.sh
+          ) > public/install-vps-node-setup.sh.sha256
           {
             printf 'GitHub repository: %s\n' "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
             printf 'Source commit: %s\n' "${GITHUB_SHA}"
@@ -54,6 +99,10 @@ jobs:
           /vps-node-setup.zip
             Cache-Control: no-store
           /vps-node-setup.zip.sha256
+            Cache-Control: no-store
+          /install-vps-node-setup.sh
+            Cache-Control: no-store
+          /install-vps-node-setup.sh.sha256
             Cache-Control: no-store
           /SOURCE-COMMIT.txt
             Cache-Control: no-store

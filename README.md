@@ -69,7 +69,16 @@ GitHub 是默认来源。若无法打开或下载仓库，可使用已校验的�
 - [下载 Skill 压缩包](https://vps-node-download.pages.dev/vps-node-setup.zip)
 - [校验和（SHA-256）](https://vps-node-download.pages.dev/vps-node-setup.zip.sha256)
 
-下载并解压后，将其中的 `vps-node-setup` 文件夹安装或加载为 Skill，再使用上面的部署提示词。备用包与 GitHub 当前版本对应；每次公开更新都会同步刷新。
+极简 VPS 可能没有 `unzip`。可下载并校验下面的安装脚本；它会校验压缩包，并自动使用 `unzip` 或 Python 解压（不会执行部署）：
+
+```bash
+curl -fsSLO https://vps-node-download.pages.dev/install-vps-node-setup.sh
+curl -fsSLO https://vps-node-download.pages.dev/install-vps-node-setup.sh.sha256
+sha256sum -c install-vps-node-setup.sh.sha256
+bash install-vps-node-setup.sh
+```
+
+随后将生成的 `vps-node-setup` 文件夹安装或加载为 Skill，再使用上面的部署提示词。运行脚本时请使用 `bash scripts/deploy.sh <command>`，不依赖解压程序是否保留可执行权限。备用包与 GitHub 当前版本对应；每次公开更新都会同步刷新。
 
 ### 复制独立验证提示词
 
