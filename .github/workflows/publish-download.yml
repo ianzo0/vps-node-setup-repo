@@ -1,0 +1,51 @@
+name: Publish Skill Download
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "skills/vps-proxy-node-setup/**"
+      - ".github/workflows/publish-download.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-skill-download
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    name: Package and publish
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Run offline checks
+        run: skills/vps-proxy-node-setup/tests/test_static.sh
+
+      - name: Build verified download package
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public
+          git archive --format=zip --prefix=vps-node-setup/ \
+            --output=public/vps-node-setup.zip \
+            HEAD:skills/vps-proxy-node-setup
+          sha256sum public/vps-node-setup.zip > public/vps-node-setup.zip.sha256
+          {
+            printf 'GitHub repository: %s\n' "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
+            printf 'Source commit: %s\n' "${GITHUB_SHA}"
+            printf 'Archive root: vps-node-setup/\n'
+          } > public/SOURCE-COMMIT.txt
+
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy public --project-name=vps-node-download --branch=main
